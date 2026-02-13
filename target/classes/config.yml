@@ -1,8 +1,11 @@
 # Backend API Configuration
 api:
-  # Your Fly.io backend URL
-  url: "https://your-app.fly.dev/api"
-  # API key (must match backend API_KEY)
+  # Get this from Railway -> Settings -> Networking -> Generate Domain
+  # Example: "https://ninesmpban-production.up.railway.app/api"
+  # MAKE SURE to keep the /api at the end!
+  url: "https://YOUR-RAILWAY-DOMAIN.up.railway.app/api"
+  
+  # The API_KEY you set in Railway -> Variables
   key: "your-api-key-here"
 
 # Sync Settings

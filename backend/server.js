@@ -16,6 +16,10 @@ let bansCollection;
 
 const connectDB = async () => {
     try {
+        if (!process.env.MONGODB_URI) {
+            console.error('❌ MONGODB_URI environment variable is missing!');
+            process.exit(1);
+        }
         const client = new MongoClient(process.env.MONGODB_URI);
         await client.connect();
         db = client.db('ninesmpban');

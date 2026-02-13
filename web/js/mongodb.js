@@ -1,7 +1,11 @@
 // Backend API Configuration
 const API_CONFIG = {
-    baseUrl: 'https://your-app.fly.dev/api', // Replace with your Fly.io URL
-    apiKey: 'your-api-key-here' // Same as backend API_KEY
+    // Get this from Railway -> Settings -> Networking
+    // Example: 'https://ninesmpban-production.up.railway.app/api'
+    baseUrl: 'https://YOUR-RAILWAY-DOMAIN.up.railway.app/api',
+
+    // The API_KEY you set in Railway -> Variables
+    apiKey: 'your-api-key-here'
 };
 
 /**
