@@ -1,0 +1,31 @@
+name: NineSMPBanSystem
+version: '1.0.0'
+main: com.ninesmp.bansystem.BanSystemPlugin
+api-version: '1.20'
+author: NineSMP
+description: Cross-server ban system with MongoDB synchronization
+
+commands:
+  ban:
+    description: Permanently ban a player and their IP
+    usage: /ban <player> <reason>
+    permission: bansystem.ban
+  tempban:
+    description: Temporarily ban a player and their IP
+    usage: /tempban <player> <time> <reason>
+    permission: bansystem.tempban
+  kick:
+    description: Kick a player from the server
+    usage: /kick <player> <reason>
+    permission: bansystem.kick
+
+permissions:
+  bansystem.ban:
+    description: Allows permanent banning
+    default: op
+  bansystem.tempban:
+    description: Allows temporary banning
+    default: op
+  bansystem.kick:
+    description: Allows kicking players
+    default: op

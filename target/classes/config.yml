@@ -1,0 +1,48 @@
+# Backend API Configuration
+api:
+  # Your Fly.io backend URL
+  url: "https://your-app.fly.dev/api"
+  # API key (must match backend API_KEY)
+  key: "your-api-key-here"
+
+# Sync Settings
+sync:
+  # How often to check for new bans (in seconds)
+  interval: 5
+
+# Ban Reasons (for tab completion)
+ban-reasons:
+  - "Hacking"
+  - "Exploiting"
+  - "Griefing"
+  - "Inappropriate_behavior"
+  - "Spam"
+  - "Cheating"
+  - "Toxicity"
+  - "Advertising"
+  
+# Ban Messages
+messages:
+  ban-format: |
+    &c&lConnection Lost
+    
+    &cYou were kicked from lobby: %reason%
+    &7Time left: &fPermanent
+    
+    &7Ban ID: &f%banid%
+    &7You may be able to appeal this ban on
+    &7discord.gg/yourserver
+  tempban-format: |
+    &c&lConnection Lost
+    
+    &cYou were kicked from lobby: %reason%
+    &7Time left: &f%timeleft%
+    
+    &7Ban ID: &f%banid%
+    &7You may be able to appeal this ban on
+    &7discord.gg/yourserver
+  ban-success: "&aSuccessfully banned &f%player% &a(Ban ID: &f%banid%&a)"
+  tempban-success: "&aSuccessfully temp-banned &f%player% &afor &f%duration% &a(Ban ID: &f%banid%&a)"
+  kick-success: "&aSuccessfully kicked &f%player%"
+  player-not-found: "&cPlayer not found!"
+  invalid-time: "&cInvalid time format! Use: 1s, 5m, 2h, 7d"

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NineSMP Ban System - Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="dashboard-page">
+    <!-- Header -->
+    <header class="dashboard-header">
+        <div class="header-left">
+            <div class="logo-small">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+            </div>
+            <h1>NineSMP Ban System</h1>
+        </div>
+        <div class="header-right">
+            <div class="sync-indicator">
+                <div class="sync-dot"></div>
+                <span>Synced</span>
+            </div>
+            <button id="logoutBtn" class="btn-secondary">Logout</button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="dashboard-main">
+        <!-- Statistics Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon total">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <path
+                            d="M9 11C11.2091 11 13 9.20914 13 7C13 4.79086 11.2091 3 9 3C6.79086 3 5 4.79086 5 7C5 9.20914 6.79086 11 9 11Z"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <p class="stat-label">Total Bans</p>
+                    <h2 class="stat-value" id="totalBans">0</h2>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon active">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path d="M15 9L9 15M9 9L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <p class="stat-label">Active Bans</p>
+                    <h2 class="stat-value" id="activeBans">0</h2>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon temp">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <p class="stat-label">Temp Bans</p>
+                    <h2 class="stat-value" id="tempBans">0</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions Bar -->
+        <div class="actions-bar">
+            <div class="search-box">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+                <input type="text" id="searchInput" placeholder="Search by username, UUID, IP, or Ban ID...">
+            </div>
+            <button id="newBanBtn" class="btn-primary">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+                <span>New Ban</span>
+            </button>
+        </div>
+
+        <!-- Bans Table -->
+        <div class="table-container">
+            <table class="bans-table">
+                <thead>
+                    <tr>
+                        <th>Ban ID</th>
+                        <th>Username</th>
+                        <th>UUID</th>
+                        <th>IP Address</th>
+                        <th>Reason</th>
+                        <th>Banned By</th>
+                        <th>Date</th>
+                        <th>Expiry</th>
+                        <th>Source</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="bansTableBody">
+                    <tr class="loading-row">
+                        <td colspan="10">
+                            <div class="loading-spinner"></div>
+                            <p>Loading bans...</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- New Ban Modal -->
+    <div id="newBanModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create New Ban</h2>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <form id="newBanForm">
+                <div class="form-group">
+                    <label for="banUsername">Username</label>
+                    <input type="text" id="banUsername" required placeholder="Player username">
+                </div>
+
+                <div class="form-group">
+                    <label for="banUuid">UUID</label>
+                    <input type="text" id="banUuid" required placeholder="Player UUID">
+                </div>
+
+                <div class="form-group">
+                    <label for="banIp">IP Address</label>
+                    <input type="text" id="banIp" placeholder="Player IP (optional)">
+                </div>
+
+                <div class="form-group">
+                    <label for="banReason">Reason</label>
+                    <textarea id="banReason" required placeholder="Ban reason" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="banType">Ban Type</label>
+                    <select id="banType">
+                        <option value="permanent">Permanent</option>
+                        <option value="temporary">Temporary</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="expiryGroup" style="display: none;">
+                    <label for="banExpiry">Expiry Date</label>
+                    <input type="datetime-local" id="banExpiry">
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" id="cancelBan">Cancel</button>
+                    <button type="submit" class="btn-primary">Create Ban</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/mongodb.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+
+</html>
