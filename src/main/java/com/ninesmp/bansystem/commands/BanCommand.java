@@ -72,6 +72,7 @@ public class BanCommand implements CommandExecutor {
                 .expiry(null) // Permanent ban
                 .active(true)
                 .source("game")
+                .type("BAN")
                 .build();
 
         // Save via API

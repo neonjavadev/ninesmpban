@@ -3,10 +3,10 @@ api:
   # Get this from Railway -> Settings -> Networking -> Generate Domain
   # Example: "https://ninesmpban-production.up.railway.app/api"
   # MAKE SURE to keep the /api at the end!
-  url: "https://YOUR-RAILWAY-DOMAIN.up.railway.app/api"
+  url: "https://ninesmpban-production.up.railway.app/api"
   
   # The API_KEY you set in Railway -> Variables
-  key: "your-api-key-here"
+  key: "8de9f41b239e25d2b6e1476d0596321453ab49e623485ab2c9183416e7894a8f"
 
 # Sync Settings
 sync:
@@ -43,7 +43,7 @@ messages:
     
     &7Ban ID: &f%banid%
     &7You may be able to appeal this ban on
-    &7discord.gg/yourserver
+    &7discord.ninemc.fun
   ban-success: "&aSuccessfully banned &f%player% &a(Ban ID: &f%banid%&a)"
   tempban-success: "&aSuccessfully temp-banned &f%player% &afor &f%duration% &a(Ban ID: &f%banid%&a)"
   kick-success: "&aSuccessfully kicked &f%player%"

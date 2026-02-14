@@ -88,6 +88,7 @@ public class TempBanCommand implements CommandExecutor {
                 .expiry(expiry)
                 .active(true)
                 .source("game")
+                .type("BAN")
                 .build();
 
         // Save via API

@@ -34,11 +34,17 @@ public class BanSyncTask extends BukkitRunnable {
 
             // Check if player should be banned
             for (Ban ban : activeBans) {
+                if (ban.getType() != null && ban.getType().equals("MUTE"))
+                    continue;
+
                 if (ban.getPlayerUuid().equals(uuid) || ban.getIpAddress().equals(ip)) {
-                    // Player is banned, kick them
+                    // Player is banned, kick them (must be on main thread)
                     String kickMessage = formatBanMessage(ban);
-                    player.kickPlayer(kickMessage);
-                    plugin.getLogger().info("Kicked " + player.getName() + " due to active ban: " + ban.getBanId());
+
+                    Bukkit.getScheduler().runTask(plugin, () -> {
+                        player.kickPlayer(kickMessage);
+                        plugin.getLogger().info("Kicked " + player.getName() + " due to active ban: " + ban.getBanId());
+                    });
                     break;
                 }
             }
@@ -62,6 +68,7 @@ public class BanSyncTask extends BukkitRunnable {
                 .replace("%reason%", ban.getReason())
                 .replace("%banid%", ban.getBanId())
                 .replace("%admin%", ban.getBannedBy())
-                .replace("%expiry%", ban.getFormattedExpiry()));
+                .replace("%expiry%", ban.getFormattedExpiry())
+                .replace("%timeleft%", ban.getTimeLeft()));
     }
 }

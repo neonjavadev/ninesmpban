@@ -121,6 +121,7 @@
                         <th>Banned By</th>
                         <th>Date</th>
                         <th>Expiry</th>
+                        <th>Type</th>
                         <th>Source</th>
                         <th>Actions</th>
                     </tr>
@@ -152,7 +153,7 @@
 
                 <div class="form-group">
                     <label for="banUuid">UUID</label>
-                    <input type="text" id="banUuid" required placeholder="Player UUID">
+                    <input type="text" id="banUuid" placeholder="Auto-fetched from username (optional)">
                 </div>
 
                 <div class="form-group">
@@ -166,7 +167,15 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="banType">Ban Type</label>
+                    <label for="punishmentType">Punishment Type</label>
+                    <select id="punishmentType">
+                        <option value="BAN">Ban</option>
+                        <option value="MUTE">Mute</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="banType">Duration Type</label>
                     <select id="banType">
                         <option value="permanent">Permanent</option>
                         <option value="temporary">Temporary</option>
@@ -174,8 +183,10 @@
                 </div>
 
                 <div class="form-group" id="expiryGroup" style="display: none;">
-                    <label for="banExpiry">Expiry Date</label>
-                    <input type="datetime-local" id="banExpiry">
+                    <label for="banExpiry">Duration</label>
+                    <input type="text" id="banExpiry" placeholder="e.g. 10m, 2h, 1d">
+                    <small style="color: var(--text-muted);">Format: 10s (seconds), 10m (minutes), 10h (hours), 1d
+                        (days)</small>
                 </div>
 
                 <div class="modal-actions">

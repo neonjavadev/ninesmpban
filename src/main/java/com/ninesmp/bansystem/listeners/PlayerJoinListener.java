@@ -25,7 +25,7 @@ public class PlayerJoinListener implements Listener {
 
         // Check for UUID ban
         Ban uuidBan = apiClient.getActiveBanByUuid(uuid);
-        if (uuidBan != null) {
+        if (uuidBan != null && (uuidBan.getType() == null || uuidBan.getType().equals("BAN"))) {
             String kickMessage = formatBanMessage(uuidBan);
             event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, kickMessage);
             return;
@@ -33,7 +33,7 @@ public class PlayerJoinListener implements Listener {
 
         // Check for IP ban
         Ban ipBan = apiClient.getActiveBanByIp(ip);
-        if (ipBan != null) {
+        if (ipBan != null && (ipBan.getType() == null || ipBan.getType().equals("BAN"))) {
             String kickMessage = formatBanMessage(ipBan);
             event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, kickMessage);
         }
@@ -56,6 +56,7 @@ public class PlayerJoinListener implements Listener {
                 .replace("%reason%", ban.getReason())
                 .replace("%banid%", ban.getBanId())
                 .replace("%admin%", ban.getBannedBy())
-                .replace("%expiry%", ban.getFormattedExpiry()));
+                .replace("%expiry%", ban.getFormattedExpiry())
+                .replace("%timeleft%", ban.getTimeLeft()));
     }
 }

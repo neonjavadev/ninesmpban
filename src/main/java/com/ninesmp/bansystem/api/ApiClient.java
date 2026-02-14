@@ -16,16 +16,20 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public class ApiClient {
-    private final String baseUrl;
-    private final String apiKey;
+    private String baseUrl;
+    private String apiKey;
     private final Gson gson;
     private final Logger logger;
 
     public ApiClient(String baseUrl, String apiKey, Logger logger) {
-        this.baseUrl = baseUrl.endsWith("/") ? baseUrl.substring(0, baseUrl.length() - 1) : baseUrl;
-        this.apiKey = apiKey;
+        setCredentials(baseUrl, apiKey);
         this.gson = new Gson();
         this.logger = logger;
+    }
+
+    public void setCredentials(String baseUrl, String apiKey) {
+        this.baseUrl = baseUrl.endsWith("/") ? baseUrl.substring(0, baseUrl.length() - 1) : baseUrl;
+        this.apiKey = apiKey;
     }
 
     /**
@@ -81,11 +85,28 @@ public class ApiClient {
     }
 
     /**
+     * Deactivate a ban (unban)
+     */
+    public void deactivateBan(String banId) throws Exception {
+        String encodedBanId = java.net.URLEncoder.encode(banId, StandardCharsets.UTF_8.toString());
+        request("/bans/" + encodedBanId + "/deactivate", "PUT", null);
+        logger.info("Ban deactivated via API: " + banId);
+    }
+
+    /**
      * Get active ban by UUID
      */
     public Ban getActiveBanByUuid(String uuid) {
+        return getActiveBanByUuid(uuid, null);
+    }
+
+    public Ban getActiveBanByUuid(String uuid, String type) {
         try {
-            JsonObject response = request("/bans/uuid/" + uuid, "GET", null);
+            String endpoint = "/bans/uuid/" + uuid;
+            if (type != null) {
+                endpoint += "?type=" + type;
+            }
+            JsonObject response = request(endpoint, "GET", null);
             if (response.has("data") && !response.get("data").isJsonNull()) {
                 return gson.fromJson(response.get("data"), Ban.class);
             }
@@ -100,8 +121,16 @@ public class ApiClient {
      * Get active ban by IP
      */
     public Ban getActiveBanByIp(String ip) {
+        return getActiveBanByIp(ip, null);
+    }
+
+    public Ban getActiveBanByIp(String ip, String type) {
         try {
-            JsonObject response = request("/bans/ip/" + ip, "GET", null);
+            String endpoint = "/bans/ip/" + ip;
+            if (type != null) {
+                endpoint += "?type=" + type;
+            }
+            JsonObject response = request(endpoint, "GET", null);
             if (response.has("data") && !response.get("data").isJsonNull()) {
                 return gson.fromJson(response.get("data"), Ban.class);
             }

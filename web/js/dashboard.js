@@ -78,6 +78,7 @@ function renderBansTable() {
                 : `<span class="badge badge-permanent">Permanent</span>`
             }
                 </td>
+                <td><span class="badge badge-${(ban.type || 'BAN').toLowerCase()}">${(ban.type || 'BAN')}</span></td>
                 <td><span class="badge badge-${ban.source}">${ban.source}</span></td>
                 <td>
                     ${isActive
@@ -156,11 +157,37 @@ function setupEventListeners() {
  */
 async function createNewBan() {
     const username = document.getElementById('banUsername').value;
-    const uuid = document.getElementById('banUuid').value;
+    let uuid = document.getElementById('banUuid').value;
     const ip = document.getElementById('banIp').value || 'Unknown';
     const reason = document.getElementById('banReason').value;
+    const punishmentType = document.getElementById('punishmentType').value;
     const banType = document.getElementById('banType').value;
-    const expiry = document.getElementById('banExpiry').value;
+    const durationStr = document.getElementById('banExpiry').value;
+
+    let expiry = null;
+    if (banType === 'temporary' && durationStr) {
+        const duration = parseDuration(durationStr);
+        if (duration > 0) {
+            expiry = new Date(Date.now() + duration).toISOString();
+        } else {
+            showError("Invalid duration format. Use 10m, 1h, 1d etc.");
+            return;
+        }
+    }
+
+    // Auto-resolve UUID if missing
+    if (!uuid) {
+        try {
+            showSuccess(`Resolving UUID for ${username}...`);
+            const response = await fetch(`https://api.ashcon.app/mojang/v2/user/${username}`);
+            if (!response.ok) throw new Error('Player not found');
+            const data = await response.json();
+            uuid = data.uuid;
+        } catch (error) {
+            showError(`Could not find player: ${username}`);
+            return;
+        }
+    }
 
     const banData = {
         banId: generateBanId(),
@@ -170,9 +197,10 @@ async function createNewBan() {
         reason: reason,
         bannedBy: 'admin',
         timestamp: new Date().toISOString(),
-        expiry: banType === 'temporary' && expiry ? new Date(expiry).toISOString() : null,
+        expiry: expiry,
         active: true,
-        source: 'web'
+        source: 'web',
+        type: punishmentType
     };
 
     try {
@@ -301,3 +329,28 @@ toastStyle.textContent = `
     }
 `;
 document.head.appendChild(toastStyle);
+
+/**
+ * Parse duration string (10s, 10m, 10h, 1d) to milliseconds
+ */
+function parseDuration(duration) {
+    const regex = /(\d+)([smhd])/g;
+    let totalMillis = 0;
+    let match;
+    let hasMatch = false;
+
+    while ((match = regex.exec(duration.toLowerCase())) !== null) {
+        hasMatch = true;
+        const value = parseInt(match[1]);
+        const unit = match[2];
+
+        switch (unit) {
+            case 's': totalMillis += value * 1000; break;
+            case 'm': totalMillis += value * 60 * 1000; break;
+            case 'h': totalMillis += value * 60 * 60 * 1000; break;
+            case 'd': totalMillis += value * 24 * 60 * 60 * 1000; break;
+        }
+    }
+
+    return hasMatch ? totalMillis : -1;
+}

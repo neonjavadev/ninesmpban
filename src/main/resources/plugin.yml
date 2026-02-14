@@ -16,8 +16,28 @@ commands:
     permission: bansystem.tempban
   kick:
     description: Kick a player from the server
-    usage: /kick <player> <reason>
+    usage: /kick <player> [reason]
     permission: bansystem.kick
+  unban:
+    description: Unban a player
+    usage: /unban <player>
+    permission: bansystem.unban
+  banreload:
+    description: Reload the plugin configuration
+    usage: /banreload
+    permission: bansystem.reload
+  mute:
+    description: Mute a player
+    usage: /mute <player> <reason>
+    permission: bansystem.mute
+  tempmute:
+    description: Temporarily mute a player
+    usage: /tempmute <player> <duration> <reason>
+    permission: bansystem.tempmute
+  unmute:
+    description: Unmute a player
+    usage: /unmute <player>
+    permission: bansystem.unmute
 
 permissions:
   bansystem.ban:

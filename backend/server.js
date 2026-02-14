@@ -92,10 +92,16 @@ app.get('/api/bans/:banId', authenticateApiKey, async (req, res) => {
 // Get ban by UUID
 app.get('/api/bans/uuid/:uuid', authenticateApiKey, async (req, res) => {
     try {
-        const ban = await bansCollection.findOne({
+        const query = {
             playerUuid: req.params.uuid,
             active: true
-        });
+        };
+
+        if (req.query.type) {
+            query.type = req.query.type;
+        }
+
+        const ban = await bansCollection.findOne(query);
 
         res.json({ success: true, data: ban });
     } catch (error) {
@@ -107,10 +113,16 @@ app.get('/api/bans/uuid/:uuid', authenticateApiKey, async (req, res) => {
 // Get ban by IP
 app.get('/api/bans/ip/:ip', authenticateApiKey, async (req, res) => {
     try {
-        const ban = await bansCollection.findOne({
+        const query = {
             ipAddress: req.params.ip,
             active: true
-        });
+        };
+
+        if (req.query.type) {
+            query.type = req.query.type;
+        }
+
+        const ban = await bansCollection.findOne(query);
 
         res.json({ success: true, data: ban });
     } catch (error) {

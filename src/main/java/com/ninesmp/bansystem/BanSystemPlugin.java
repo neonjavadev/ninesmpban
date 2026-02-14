@@ -4,7 +4,10 @@ import com.ninesmp.bansystem.api.ApiClient;
 import com.ninesmp.bansystem.commands.BanCommand;
 import com.ninesmp.bansystem.commands.BanTabCompleter;
 import com.ninesmp.bansystem.commands.KickCommand;
+import com.ninesmp.bansystem.commands.ReloadCommand;
 import com.ninesmp.bansystem.commands.TempBanCommand;
+import com.ninesmp.bansystem.commands.UnbanCommand;
+import com.ninesmp.bansystem.listeners.AsyncPlayerChatListener;
 import com.ninesmp.bansystem.listeners.PlayerJoinListener;
 import com.ninesmp.bansystem.tasks.BanSyncTask;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -27,14 +30,26 @@ public class BanSystemPlugin extends JavaPlugin {
         // Register commands
         BanTabCompleter tabCompleter = new BanTabCompleter(this);
         getCommand("ban").setExecutor(new BanCommand(this, apiClient));
-        getCommand("ban").setTabCompleter(tabCompleter);
         getCommand("tempban").setExecutor(new TempBanCommand(this, apiClient));
-        getCommand("tempban").setTabCompleter(tabCompleter);
         getCommand("kick").setExecutor(new KickCommand(this));
-        getCommand("kick").setTabCompleter(tabCompleter);
+        getCommand("unban").setExecutor(new UnbanCommand(this, apiClient));
+        getCommand("banreload").setExecutor(new ReloadCommand(this));
+        getCommand("mute").setExecutor(new MuteCommand(this, apiClient));
+        getCommand("tempmute").setExecutor(new TempMuteCommand(this, apiClient));
+        getCommand("unmute").setExecutor(new UnmuteCommand(this, apiClient));
+
+        // Tab completers
+        getCommand("ban").setTabCompleter(new BanTabCompleter(this));
+        getCommand("tempban").setTabCompleter(new BanTabCompleter(this));
+        getCommand("kick").setTabCompleter(new BanTabCompleter(this));
+        getCommand("unban").setTabCompleter(new BanTabCompleter(this));
+        getCommand("mute").setTabCompleter(new BanTabCompleter(this));
+        getCommand("tempmute").setTabCompleter(new BanTabCompleter(this));
+        getCommand("unmute").setTabCompleter(new BanTabCompleter(this));
 
         // Register listeners
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(this, apiClient), this);
+        getServer().getPluginManager().registerEvents(new AsyncPlayerChatListener(this, apiClient), this);
 
         // Start sync task
         int syncInterval = getConfig().getInt("sync.interval", 5) * 20; // Convert seconds to ticks
@@ -58,5 +73,22 @@ public class BanSystemPlugin extends JavaPlugin {
 
     public ApiClient getApiClient() {
         return apiClient;
+    }
+
+    public void reloadSystem() {
+        reloadConfig();
+        String apiUrl = getConfig().getString("api.url");
+        String apiKey = getConfig().getString("api.key");
+        apiClient.setCredentials(apiUrl, apiKey);
+
+        // Restart sync task with new interval
+        if (syncTask != null) {
+            syncTask.cancel();
+        }
+        int syncInterval = getConfig().getInt("sync.interval", 5) * 20;
+        syncTask = new BanSyncTask(this, apiClient);
+        syncTask.runTaskTimerAsynchronously(this, 20L, syncInterval);
+
+        getLogger().info("BanSystem reloaded. Connected to API: " + apiUrl);
     }
 }

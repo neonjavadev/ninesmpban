@@ -2,10 +2,10 @@
 const API_CONFIG = {
     // Get this from Railway -> Settings -> Networking
     // Example: 'https://ninesmpban-production.up.railway.app/api'
-    baseUrl: 'https://YOUR-RAILWAY-DOMAIN.up.railway.app/api',
+    baseUrl: 'https://ninesmpban-production.up.railway.app/api',
 
     // The API_KEY you set in Railway -> Variables
-    apiKey: 'your-api-key-here'
+    apiKey: '8de9f41b239e25d2b6e1476d0596321453ab49e623485ab2c9183416e7894a8f'
 };
 
 /**
@@ -83,7 +83,7 @@ async function createBan(banData) {
  */
 async function deactivateBan(banId) {
     try {
-        const result = await apiRequest(`/bans/${banId}/deactivate`, 'PUT');
+        const result = await apiRequest(`/bans/${encodeURIComponent(banId)}/deactivate`, 'PUT');
         return result.success;
     } catch (error) {
         console.error('Error deactivating ban:', error);
